@@ -1,15 +1,11 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import Cart from './components/Cart'
+import App from './components/App'
 
 ReactDom.render(
   <div>
-    <div>
-      Hello React!
-    </div>
-    <hr/>
-    <Cart min={1} max={5}></Cart>
+    <App/>
   </div>,
   document.querySelector('.app')
 );

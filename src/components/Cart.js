@@ -1,60 +1,92 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useMemo} from "react";
+import MinMaxRef from "./MinMaxRef";
 
-Cart.propTypes = {
-  min: PropTypes.number,
-  max: PropTypes.number.isRequired
-};
+export default function() {
+  let [products, setProducts] = useState(stubProducts);
 
-export default function Cart({min = 0, max}) {
-  let [amount, setAmount] = useState(min);
-
-  function incr() {
-    updateAmount(amount + 1)
+  let updateProduct = (id, amount) => {
+    setProducts(products.map(pr => pr.id != id ? pr : ({...pr, amount}) ))
   }
 
-  function decr() {
-    updateAmount(amount - 1)
+  function totalPriceFun() {
+    return products.map(product => product.price * product.amount).reduce((prev, next) => {return prev + next}, 0);
+  }
+  const totalPrice = useMemo(totalPriceFun, [products]);
+
+  let removeProduct = (id) => {
+    let updatedProducts = products.filter(product => product.id != id);
+    setProducts(updatedProducts);
   }
 
-  function changeAmount(e) {
-    const newAmount = parseInt(e.target.value, 10);
-    updateAmount(newAmount)
-  }
+  return <div>
+    <h1>Cart</h1>
+    <table>
+      <tbody>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Amount</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+        { products.map((product, i) => (
+          <tr key={product.id}>
+            <td>{ i + 1 }</td>
+            <td>{ product.title }</td>
+            <td>{ product.price }</td>
+            <td>
+              <MinMaxRef max={product.total_amount} current={product.amount} onChange={count => updateProduct(product.id, count)} />
+            </td>
+            <td>{ product.price * product.amount }</td>
+            <td>
+              <button onClick={ () => removeProduct(product.id) }>Remove</button>
+            </td>
+          </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    <b>Total price:</b> { totalPrice }
+  </div>
+}
 
-  function updateAmount(value) {
-    if (isAmountValid(value)) {
-      setAmount(value);
-    } else {
-      setAcceptableAmount(value);
+function stubProducts() {
+  return [
+    {
+      id: 100,
+      title: "Water",
+      price: 10.0,
+      amount: 20,
+      total_amount: 20
+    },
+    {
+      id: 101,
+      title: "Oatmeal",
+      price: 30.0,
+      amount: 1,
+      total_amount: 10
+    },
+    {
+      id: 102,
+      title: "Butter",
+      price: 50.0,
+      amount: 3,
+      total_amount: 15
+    },
+    {
+      id: 103,
+      title: "Salt",
+      price: 1.0,
+      amount: 5,
+      total_amount: 50
+    },
+    {
+      id: 104,
+      title: "Walnuts",
+      price: 30.0,
+      amount: 2,
+      total_amount: 20
     }
-  }
-
-  function setAcceptableAmount(value) {
-    let acceptableAmount = parseInt(value) || min;
-    acceptableAmount = acceptableAmount > max ? max : acceptableAmount;
-    acceptableAmount = acceptableAmount < min ? min : acceptableAmount;
-
-    setAmount(acceptableAmount);
-  }
-
-  function isAmountValid(value) {
-    return Number.isInteger(value) &&
-           value >= min &&
-           value <= max;
-  }
-
-  return <>
-    <div>
-      <div>
-        <b>Cart</b>
-      </div>
-      <span>
-        <button onClick={ decr }>-</button>
-        &nbsp;{ amount }&nbsp;
-        <input type="text" value={ amount } onChange={ changeAmount } />
-        <button onClick={ incr }>+</button>
-      </span>
-    </div>
-  </>
+  ];
 }
