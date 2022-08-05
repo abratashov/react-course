@@ -1,5 +1,6 @@
 import React, {useState, useMemo} from "react";
-import MinMaxRef from "./MinMaxRef";
+// import MinMaxRef from "./MinMaxRef";
+import MinMax from './MinMax';
 
 export default function() {
   let [products, setProducts] = useState(stubProducts);
@@ -36,7 +37,7 @@ export default function() {
             <td>{ product.title }</td>
             <td>{ product.price }</td>
             <td>
-              <MinMaxRef max={product.total_amount} current={product.amount} onChange={count => updateProduct(product.id, count)} />
+              <MinMax max={product.total_amount} current={product.amount} onChange={count => updateProduct(product.id, count)} />
             </td>
             <td>{ product.price * product.amount }</td>
             <td>

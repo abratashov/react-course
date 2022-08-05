@@ -21,7 +21,21 @@ let conf = {
         exclude: '/node_modules/'
       },
       {
-        test: /\.css$/,
+        test: /\.module\.css$/, // custom isolated style for each component
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[local]__[sha1:hash:hex:7]'
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /^((?!\.module).)*css$/, // common style for all pages
         use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]

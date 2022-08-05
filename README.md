@@ -23,24 +23,30 @@ npm run dev
 # Go to http://localhost:8080/
 ```
 
-JSX
-  React.component(...) // old class based approach
-  export default function Cart({min = 0, max}) { // new functional based approach
-  <div className="some"... onClick ...
-  CamelCaseComponentName
-  {name, text} - decomposition
-  "<>" - fragment / template
+### JSX
+React.component(...) // old class based approach
 
-React State
-  hooks in the RAM hash instead of Russian dolls components
-  let [state, setState] = useState(1);
-  for different components need the common state - Redux Toolkit / Mobix
+export default function Cart({min = 0, max}) { // new functional based approach
+
+```
+<div className="some"... onClick ...
+CamelCaseComponentName
+{name, text} - decomposition
+"<>" - fragment / template
+```
+### React State
+
+hooks in the RAM hash instead of Russian dolls components
+
+let [state, setState] = useState(1);
+
+for different components need the standard state - Redux Toolkit / Mobix
 
 
 ## HW 1
 
 ```text
-0. Tod do: https://webdevskills.com/courses/osnovy-react/start-react-and-jsx/
+0. Todo: https://webdevskills.com/courses/osnovy-react/start-react-and-jsx/
 
 In this HW, we implement a component that is relevant, for example, for setting the number of products on the cart pages.
 
@@ -77,8 +83,8 @@ useState
 useEffect // the same as `watch` in Vue, processes outer updating props for refreshing inner state
              useEffect(() => {
                 applyCurrent(current);
-                // or if changed IDs of goods - need to fetch info about this goods
-              }, [min, max]); // depended variables
+                // or if changed IDs of goods - need to fetch info about these goods
+              }, [min, max]); // depended on variables
 useCallback // caching of function
 useMemo // caching of heavy calculation ~ computed field in Vue
 useReducer // complex state in Redux manner, but we can use outer storage
@@ -90,8 +96,8 @@ useRef // direct access to inputs of DOM elements
 <CompName key={uniqId}> // another way of re-render: key as digest sensitive fields
 props - pass data flow from parent to child
 callback - pass data flow from child to parent
-onChange={ cnt => setCnt(pr.id, cnt) } // use closure for call parent fucntion but not good for optimization because it will be re-rendered forever
-[...products] // problem of immutability conception - non changeable data but need to re-create on update
+onChange={ cnt => setCnt(pr.id, cnt) } // use closure for call parent function but not good for optimization because it will be re-rendered forever
+[...products] // problem of immutability conception - non-changeable data but need to be re-created on update
 setProducts(products.map(pr => pr.id != id ? pr : ({ ...pr, cnt })));
 ```
 
@@ -101,17 +107,39 @@ callbacks in vue implemented as $emit
 
 problem of breaking changes in vue 2 => 3
 
-problem of React/Redux is overconfiguring simple project with complex things
+problem of React/Redux is over configuring simple project with complex things
 
 React/Mobix solves Redux immutability complexity problem
 
 ## HW 2
 ```
 1. Refine the final example from the lesson.
-   - show total price of all products
-   - each item has a remove button (from cart)
+   - show the total price of all products
+   - each item has a remove button (from the cart)
    - the final cost of the order is calculated
 
-2. (*) Make MinMax lazy, call callback
-   onChange not immediately, but on loss of focus or key enter.
+2. (*) Make MinMax lazy, call the callback
+   onChange not immediately, but on the loss of focus or key enter.
 ```
+
+# Lesson 3
+https://webdevskills.com/catalog
+
+Need to avoid work with sync of inner state and props, best way - using `useRef`
+
+`useRef` - instead of `useState` for directly managing the state of DOM elements
+
+`useEffect` - use when parent's data is changed from props
+
+
+CSS should be set up in the webpack config - common styles and component (hashed) styles
+
+Modular CSS allows separate styles for every component
+
+React webhooks are similar to mixing in other languages, it substitutes the inheritance
+
+`useEffect` returns a garbage collector function that will be called after removing component
+
+## HW3
+
+Implement hook useClickOutside(el, fn) that close modal window.
