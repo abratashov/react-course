@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import propTypes from './props';
 
 import style from './style.module.css';
@@ -42,7 +42,11 @@ function MinMax({ min = 1, max, current, onChange }){
       onBlur={parseCurrentStr}
       onKeyPress={onKeyPress}
     />
-    <button className="btn btn-success" type="button" onClick={ inc }>+</button>
+    <button
+      className="btn btn-success"
+      type="button"
+      onClick={ inc }
+    >+</button>
   </div>
 }
 

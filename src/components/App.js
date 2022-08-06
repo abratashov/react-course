@@ -1,6 +1,6 @@
 import React, {useState, useMemo} from "react";
 import useWindowSize from './hooks/useWindowSize';
-import Cart from "./Cart";
+import Shop from "./Shop/Shop";
 import ProductCard from './ProductCard';
 import Modal from './Modal';
 import BModal from 'react-bootstrap/Modal';
@@ -12,7 +12,7 @@ export default function() {
   return <div>
     Hello React!
     <hr/>
-    <Cart/>
+    <Shop/>
     <hr/>
     <ProductCard/>
     <hr/>

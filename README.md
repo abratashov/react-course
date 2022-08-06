@@ -123,6 +123,7 @@ React/Mobix solves Redux immutability complexity problem
 ```
 
 # Lesson 3
+
 https://webdevskills.com/catalog
 
 Need to avoid work with sync of inner state and props, best way - using `useRef`
@@ -143,3 +144,48 @@ React webhooks are similar to mixing in other languages, it substitutes the inhe
 ## HW3
 
 Implement hook useClickOutside(el, fn) that close modal window.
+
+# Lesson 4
+
+React children are similar to Vue Slots - passing inner components into the body, but without named Slots
+
+`Bootstrap UI` - for testing and studying
+
+`Material UI` - a good choice for most real UI
+
+Data should be on the top Component and raises the problem of passing data through a chain of components
+
+ReactContext instead of props // allows pass common config for all components (mode, language, etc.)
+
+Ideal Component - without the state, only props
+
+We can stub context and wrap it around the components for testing.
+
+## HW4
+
+```
+Refine the source code from the lesson.
+
+Structure to be implemented:
+
+App - the root component that stores the data
+
+   Cart - a basket, in the lesson it was in the App
+     Minmax - counter
+
+   OrderForm - form with email, phone and name
+     * validation (regexp)
+     * error message
+
+     BootstrapModal - (*) optional, modal window asking
+       confirm that everything is ok or cancel
+
+   Result screen
+
+(*) Implement a theme selection button: light and dark.
+   Pass the selected topic using context.
+   Design 1-2 components to choose from in these 2 topics.
+
+Details at the end of the video.
+```
+
