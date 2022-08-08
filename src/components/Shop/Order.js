@@ -1,8 +1,15 @@
 import React, { useState } from 'react'
 import { Modal, Button } from 'react-bootstrap';
 
-export default function({ fields, onChange, onPrev, onNext }){
-  let isValid = fields.every(f => f.valid);
+import useStore from './../../hooks/useStore';
+import { observer } from 'mobx-react-lite';
+
+export default observer(Order);
+
+function Order({ onPrev, onNext }){
+  let [ orderStore ] = useStore('order');
+  let { orderForm, formValid, orderFormUpdate } = orderStore;
+
   let [ showModal, setShowModal ] = useState(false);
   let [ confirmed, setConfirmed ] = useState(false);
   let openModal = () => setShowModal(true);
@@ -22,7 +29,7 @@ export default function({ fields, onChange, onPrev, onNext }){
     <h1>User details</h1>
     <hr/>
     <form>
-    { fields.map(field => (
+    { orderForm.map(field => (
       <div className="form-group" key={field.name}>
         <label>{field.label}</label>
         <input
@@ -30,14 +37,14 @@ export default function({ fields, onChange, onPrev, onNext }){
           className={`form-control ${field.value.length && !field.valid ? 'border border-danger' : ''}`}
           name={field.name}
           value={field.value}
-          onChange={e => onChange(field.name, e.target.value.trim())}
+          onChange={e => orderFormUpdate(field.name, e.target.value.trim())}
         />
       </div>
     )) }
     </form>
     <hr/>
     <button type="button" className="btn btn-warning" onClick={onPrev}>Back to cart</button>
-    <button type="button" className="btn btn-success" onClick={openModal} disabled={!isValid}>
+    <button type="button" className="btn btn-success" onClick={openModal} disabled={!formValid}>
       Send
     </button>
     <Modal show={showModal} onHide={closeModal} onExited={onExited}>

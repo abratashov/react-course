@@ -1,11 +1,17 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './components/App'
+
+import App from './components/App';
+import StoreContext from './contexts/store';
+
+import RootStore from './store';
+
+const store = new RootStore();
 
 ReactDom.render(
-  <div>
+  <StoreContext.Provider value={store}>
     <App/>
-  </div>,
+  </StoreContext.Provider>,
   document.querySelector('.app')
 );

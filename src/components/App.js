@@ -1,5 +1,5 @@
 import React, {useState, useMemo} from "react";
-import useWindowSize from './hooks/useWindowSize';
+import useWindowSize from './../hooks/useWindowSize';
 import Shop from "./Shop/Shop";
 import ProductCard from './ProductCard';
 import Modal from './Modal';

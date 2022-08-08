@@ -189,3 +189,72 @@ App - the root component that stores the data
 Details at the end of the video.
 ```
 
+# Lesson 5
+
+It's hard to work with pure React form - need to set the unique key for each field
+
+https://formik.org/ - React plugin for working with forms
+
+Restructuring:
+
+```
+let {products, total, remove} = cartStore;
+```
+Object context:
+```
+let obj = {
+  name: 'Me!',
+
+  some() {
+    console.log(this.name);
+  }
+}
+
+obj.some(); // obj context
+
+let some = obj.some;
+
+some(); window context
+```
+
+Proxy object communicates with components via window object, it calls updating components after changing the objects.
+
+```
+https://mobx.js.org/react-integration.html - trinity of observable, computed, action
+  observable - object variables
+  computed - caching getters
+  action - optimizing actions for multiple updates
+
+makeAutoObservable(); // makes all data reactive
+
+```
+
+Decorators were proposed and discarded in the new standard of ES, only in TypeScript.
+
+Import of Store from Mobx makes components bound, but clarifies the code.
+
+Context allows isolating components for testing.
+
+Any direct import makes dependency and hardens components testing.
+
+`RootStore` solve the problem of reusing stores by each other.
+
+Best Practices of Mobx
+ - Root Store https://mobx.js.org/defining-data-stores.html
+ - Optimization - small components, etc. https://mobx.js.org/react-optimizations.html
+ - Reactions https://mobx.js.org/reactions.html
+
+https://mobx.js.org/react-integration.html
+
+## HW5
+
+Rewrite the past HW to work with Mobx, complete the example from the lesson.
+
+1. Create a store/order responsible for handling the order form.
+
+2. Bind the order and result components to the required stores.
+
+3. (*) On the Mobx site, in the best practices section, find the implementation of a single store and implement it in the project.
+
+
+Details in the video.

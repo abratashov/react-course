@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import useClickOutside from "./hooks/useClickOutside";
+import useClickOutside from "./../hooks/useClickOutside";
 
 export default function({ show, header, onHide, children }){
   let classes = ['alert', 'alert-success'];

@@ -2,7 +2,7 @@ import React from 'react';
 
 import style from './style.module.css';
 
-import useWindowSize from '../hooks/useWindowSize';
+import useWindowSize from '../../hooks/useWindowSize';
 
 export default function(){
   let { width } = useWindowSize();
