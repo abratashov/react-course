@@ -1,22 +1,43 @@
 import { makeAutoObservable } from 'mobx';
 
 export default class Cart {
-  products = productsStub();
+  items = [
+    { id: 100, cnt: 3 },
+    { id: 101, cnt: 1 }
+  ];
 
-  get total() {
-    return this.products.reduce((sum, product) => sum + product.price * product.amount, 0);
+  get itemsDetailed(){
+    return this.items.map(item => {
+      let details = this.rootStore.products.find(item.id);
+      return { ...details, ...item };
+    })
   }
 
-  change = (id, amount) => {
-    let product = this.products.find(pr => pr.id == id);
+  get total() {
+    return this.itemsDetailed.reduce((sum, product) => sum + product.price * product.cnt, 0);
+  }
 
-    if (product) {
-      product.amount = Math.max(1, Math.min(product.total_amount, amount));
+  inCart = (id) => {
+    return this.items.some(item => item.id == id);
+  }
+
+  change = (id, cnt) => {
+    let item = this.items.find(item => item.id == id);
+
+    if (item) {
+      let details = this.itemsDetailed.find(item => item.id == id);
+      item.cnt = Math.max(1, Math.min(details.rest, cnt));
+    }
+  }
+
+  add = (id) => {
+    if(!this.inCart(id)) {
+      this.items.push({id, cnt: 1});
     }
   }
 
   remove = (id) => {
-    this.products = this.products.filter(product => product.id !== id);
+    this.items = this.items.filter(item => item.id != id);
   }
 
   constructor(rootStore) {
@@ -25,51 +46,9 @@ export default class Cart {
   }
 }
 
-
-function productsStub() {
-  return [
-    {
-      id: 100,
-      title: "Water",
-      price: 10.0,
-      amount: 20,
-      total_amount: 20
-    },
-    {
-      id: 101,
-      title: "Oatmeal",
-      price: 30.0,
-      amount: 1,
-      total_amount: 10
-    },
-    {
-      id: 102,
-      title: "Butter",
-      price: 50.0,
-      amount: 3,
-      total_amount: 15
-    },
-    {
-      id: 103,
-      title: "Salt",
-      price: 1.0,
-      amount: 5,
-      total_amount: 50
-    },
-    {
-      id: 104,
-      title: "Walnuts",
-      price: 30.0,
-      amount: 2,
-      total_amount: 20
-    }
-  ];
-}
-
-
 /* constructor(){
-  this.products = observable(this.products);
+  this.items = observable(this.items);
   this.total = computed(this.total);
-  this.change = action(this.total);
-  this.change = action(this.total);
+  this.inCart = action(this.inCart);
+  ...
 } */

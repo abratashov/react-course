@@ -1,5 +1,6 @@
 import Cart from './cart';
 import Order from './order';
+import Products from './products';
 
 export default class RootStore{
   constructor() {
@@ -7,5 +8,6 @@ export default class RootStore{
 
     this.cart = new Cart(this);
     this.order = new Order(this);
+    this.products = new Products(this);
   }
 }

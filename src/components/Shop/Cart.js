@@ -3,12 +3,13 @@ import MinMax from './MinMax'
 import SettingContext from './../../contexts/settings'
 import { observer } from 'mobx-react-lite';
 import useStore from './../../hooks/useStore'
+import { Link } from 'react-router-dom';
 
 export default observer(Cart);
 
 function Cart({ onNext }){
-  let [ cart ] = useStore('cart');
-  let { products, total, remove, change } = cart;
+  let [ cartStore ] = useStore('cart');
+  let { itemsDetailed: products, total, remove, change } = cartStore;
   let settings = useContext(SettingContext);
 
   return <div>
@@ -24,18 +25,18 @@ function Cart({ onNext }){
           <th>Total</th>
           <th>Action</th>
         </tr>
-        { products.map((product, i) => (
-          <tr key={product.id}>
+        { products.map((pr, i) => (
+          <tr key={pr.id}>
             <td>{ i + 1 }</td>
-            <td>{ product.title }</td>
-            <td>{ product.price }</td>
+            <td>{ pr.title }</td>
+            <td>{ pr.price }</td>
             <td>
-              <MinMax min={1} max={product.total_amount} current={product.amount} onChange={amount => change(product.id, amount)} />
+              <MinMax min={1} max={pr.rest} current={pr.cnt} onChange={cnt => change(pr.id, cnt)} />
             </td>
-            <td>{ product.price * product.amount }</td>
+            <td>{ pr.price * pr.cnt }</td>
             <td>
-              <button type="button" onClick={() => remove(product.id)}>X</button>
-              <button type="button" onClick={() => change(product.id, product.total_amount)}>MAX</button>
+              <button type="button" onClick={() => remove(pr.id)}>X</button>
+              <button type="button" onClick={() => change(pr.id, pr.rest)}>MAX</button>
             </td>
           </tr>
         )) }
@@ -44,6 +45,6 @@ function Cart({ onNext }){
     <hr/>
     <strong>Total: { total }</strong>
     <hr/>
-    <button type="button" className="btn btn-primary" onClick={onNext}>Move to order</button>
+    <Link className="btn btn-primary" to="/order">Move to order</Link>
   </div>;
 }

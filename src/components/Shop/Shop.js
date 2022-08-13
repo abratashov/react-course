@@ -1,34 +1,57 @@
 import React, { useState } from 'react';
-import useStore from './../../hooks/useStore';
+import { Link } from 'react-router-dom';
 
+import useStore from './../../hooks/useStore';
+import RouterView from './../../routes';
+
+import Home from './Home';
+import Product from './Product';
 import Cart from './Cart';
+import CartHeader from './CartHeader';
 import Order from './Order';
 import Result from './Result';
+import E404 from './E404';
 
 import SettingContext from './../../contexts/settings'
 
 export default function(){
   let [ settings, setSettings ] = useState({ lang: 'ru', theme: 'light' });
-  let [ cartStore, orderStore] = useStore('cart', 'order');
-  let { products } = cartStore;
+  let [ orderStore] = useStore('order');
   let { orderForm, orderFormUpdate, orderData } = orderStore;
 
-  /* router parody */
-  let [ page, setPage ] = useState('cart');
-  let moveToCart = () => setPage('cart');
-  let moveToOrder= () => setPage('order');
-  let moveToResult = () => setPage('result');
-
-
   return <SettingContext.Provider value={settings}>
-    <div className="container mt-1">
-      { page === 'cart' && <Cart onNext={moveToOrder} /> }
-      { page === 'order' && <Order onPrev={moveToCart} onNext={moveToResult} />}
-      { page === 'result' && <Result products={products} orderData={orderData}/>}
+    <header>
+      <div className="container mt-1">
+        <div className="row justify-content-between">
+          <div className="col">
+            Logo
+          </div>
+          <div className="col">
+            <CartHeader />
+          </div>
+        </div>
+        <hr/>
+      </div>
+    </header>
+    <div className="container">
+      <div className="row">
+        <aside className="col col-3">
+          <ul className="list-group">
+            <li className="list-group-item"><Link to="/">Home</Link></li>
+            <li className="list-group-item"><Link to="/cart">Cart</Link></li>
+            <li className="list-group-item"><Link to="/order">Order</Link></li>
+          </ul>
+        </aside>
+        <main className="col col-9">
+          <RouterView />
+        </main>
+      </div>
       <hr/>
-      <footer>
+      <footer className="mt-1">
         <button type="button" onClick={() => setSettings({ ...settings, lang: 'uk' })}>uk</button>
         <button type="button" onClick={() => setSettings({ ...settings, lang: 'en' })}>en</button>
+        <hr/>
+        <div className="container">2022</div>
       </footer>
     </div>
   </SettingContext.Provider>;

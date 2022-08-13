@@ -258,3 +258,44 @@ Rewrite the past HW to work with Mobx, complete the example from the lesson.
 
 
 Details in the video.
+
+
+# Lesson 6
+
+To update components by `Redux/Mobx` store, it has to be changed on the top keys level!
+
+`RootStore` for access to other stores and mocking test data for isolation during the testing.
+
+```
+react-router // for native / mobile devices
+react-router-dom // for browsers
+```
+
+`historyApiFallback` - always redirects to `index` in other cases looking for a subfolder
+
+Inner routes implemented as composite tags:
+
+```
+Route
+  Route
+```
+
+`navigate` - programmatic page navigation
+
+`/components` - reusing components
+
+`/views` - components of pages
+
+`useParams` is responsible for getting access to URL params
+
+## HW6
+
+1. Implement a single product display page.
+
+2. Complete the current example:
+
+   - in the header of the site, add a basket with the output of the number of goods and the amount
+   - implement a button to add/remove goods from the cart on the main page
+   - (*) highlight the active item of the left menu
+
+Details in the video.
