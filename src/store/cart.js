@@ -1,10 +1,11 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
-export default class Cart {
-  items = [
-    { id: 100, cnt: 3 },
-    { id: 101, cnt: 1 }
-  ];
+const BASEURL = 'http://faceprog.ru/reactcourseapi/cart/';
+
+export default class Cart{
+  items = [];
+  #token = null;
+  idsInProccess = [];
 
   get itemsDetailed(){
     return this.items.map(item => {
@@ -21,28 +22,74 @@ export default class Cart {
     return this.items.some(item => item.id == id);
   }
 
-  change = (id, cnt) => {
+  inProccess = (id) => {
+    return this.idsInProccess.find(el => el == id);
+  }
+
+  change = async (id, cnt) => {
     let item = this.items.find(item => item.id == id);
 
-    if (item) {
+    if(item !== undefined){
       let details = this.itemsDetailed.find(item => item.id == id);
-      item.cnt = Math.max(1, Math.min(details.rest, cnt));
+      cnt = Math.max(1, Math.min(details.rest, cnt));
+      let res = await this.api.change(this.#token, id, cnt);
+
+      if(res){
+        runInAction(() => {
+          item.cnt = cnt;
+        });
+      }
     }
   }
 
-  add = (id) => {
-    if(!this.inCart(id)) {
-      this.items.push({id, cnt: 1});
+  add = async (id) => {
+    if(!this.inCart(id) && !this.inProccess(id)){
+      this.idsInProccess.push(id);
+      let res = await this.api.add(this.#token, id);
+
+      runInAction(() => {
+        if(res){
+          this.items.push({ id, cnt: 1 });
+        }
+
+        this.idsInProccess = this.idsInProccess.filter(el => el != id);
+      });
     }
   }
 
-  remove = (id) => {
-    this.items = this.items.filter(item => item.id != id);
+  remove = async (id) => {
+    if(this.inCart(id) && !this.inProccess(id)){
+      this.idsInProccess.push(id);
+      let res = await this.api.remove(this.#token, id);
+
+      runInAction(() => {
+        if(res){
+          this.items = this.items.filter(item => item.id != id);
+        }
+
+        this.idsInProccess = this.idsInProccess.filter(el => el != id);
+      });
+    }
+  }
+
+  load = async () => {
+    let curToken = this.rootStore.storage.getItem('CART__TOKEN');
+    let { cart, token, needUpdate } = await this.api.load(curToken);
+
+    if(needUpdate){
+      this.rootStore.storage.setItem('CART__TOKEN', token);
+    }
+
+    runInAction(() => {
+      this.items = cart;
+      this.#token = token;
+    });
   }
 
   constructor(rootStore) {
     makeAutoObservable(this); // it makes all defined data reactive - observable, computed, action
     this.rootStore = rootStore;
+    this.api = this.rootStore.api.cart;
   }
 }
 

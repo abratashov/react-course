@@ -9,12 +9,16 @@ import StoreContext from './contexts/store';
 import RootStore from './store';
 
 const store = new RootStore();
+store.cart.load();
 
-ReactDom.render(
-  <BrowserRouter>
-    <StoreContext.Provider value={store}>
-      <App/>
-    </StoreContext.Provider>
-  </BrowserRouter>,
-  document.querySelector('.app')
-);
+store.products.load().then(() => { // Before rendering need to wait finishing fetching products
+  ReactDom.render(
+    <BrowserRouter>
+      <StoreContext.Provider value={store}>
+        <App/>
+      </StoreContext.Provider>
+    </BrowserRouter>
+    ,
+    document.querySelector('.app')
+  )
+});

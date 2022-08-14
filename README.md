@@ -299,3 +299,85 @@ Route
    - (*) highlight the active item of the left menu
 
 Details in the video.
+
+# Lesson 7
+
+`PresentedContainer` - pure component
+`ComposedContainer` - component that uses store
+
+```js
+let {items: products} = cartStorage; // renaming imported functions
+```
+
+`useRoutes` - substitutes multiple `Routes/Route` definitions
+
+All HTML inside the `map` should be implemented as a component for best practice and performance
+
+There is no good choice for branching code in the view, while in Vue is `if/else`. This is one of the main lacks of React!
+
+Pros:
+  * popular in the West World, Vue is more popular in the East (China)
+  * popularity
+  * more projects
+
+Lacks of React:
+  * No directives as in VUE (need to attach many plugins)
+  * JSX
+  * immutability / Redux
+  * curve of studying
+  * need manual optimization (in Vue 100% auto-optimizing)
+
+Modules (storages) should be in one direction bound, in other cases conflicts/deadlocks.
+
+`NavLink` - highlights chosen link
+
+```js
+async load(){
+  let response = await fetch('http://faceprog.ru/reactcourseapi/products/all.php');
+  let products = await response.json();
+
+  runInAction(() => {
+    this.products = products;
+  });
+}
+...
+```
+
+`MobX` strict mode should be enabled
+Each (even consequent) changing field in MobX triggers a re-rendering component.
+
+`runInAction` - allows one re-rendering async data changing, like a `mutation` in Vue
+```js
+async load(){
+  let response = await fetch('http://faceprog.ru/reactcourseapi/products/all.php');
+  let products = await response.json();
+  // ...
+  let cart = await response2.json();
+
+  runInAction(() => {
+    this.products = products;
+    this.cart = cart;
+  });
+}
+```
+
+In case of multiple tabs of SPA, with help of ServiceWorker or EventBridge we can auto-refresh pages or refresh/sync data
+
+```js
+#token = null; // private field
+```
+
+A function that returns `await` should be defined as `async`
+
+## HW7
+
+1. Improve interaction with api
+
+   - changing the number of products from the cart page
+   - emptying the cart when clicking on apply order in the modal window
+   - data transfer before cleaning from different warehouses to order lastOrderCache
+     to display on the result screen
+
+2. (*) Block the buttons for adding / deleting goods for the duration of the request to the server
+
+Details at the end of the react-7 video.

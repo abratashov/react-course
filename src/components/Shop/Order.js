@@ -4,11 +4,12 @@ import { Modal, Button } from 'react-bootstrap';
 import useStore from './../../hooks/useStore';
 import { observer } from 'mobx-react-lite';
 
-export default observer(Order);
+import { Link, useNavigate } from 'react-router-dom'
 
-function Order({ onPrev, onNext }){
+export default observer(function(){
+  const navigate = useNavigate();
   let [ orderStore ] = useStore('order');
-  let { orderForm, formValid, orderFormUpdate } = orderStore;
+  let { form, formValid, update } = orderStore;
 
   let [ showModal, setShowModal ] = useState(false);
   let [ confirmed, setConfirmed ] = useState(false);
@@ -16,20 +17,21 @@ function Order({ onPrev, onNext }){
   let closeModal = () => setShowModal(false);
   let sendForm = () => {
     setConfirmed(true);
+    orderStore.send(); // then || await
     closeModal();
   }
 
   let onExited = () => {
     if(confirmed){
-      onNext();
+      navigate('/result');
     }
   };
 
   return <div>
-    <h1>User details</h1>
+    <h1>Input data</h1>
     <hr/>
     <form>
-    { orderForm.map(field => (
+    { form.map(field => (
       <div className="form-group" key={field.name}>
         <label>{field.label}</label>
         <input
@@ -37,14 +39,14 @@ function Order({ onPrev, onNext }){
           className={`form-control ${field.value.length && !field.valid ? 'border border-danger' : ''}`}
           name={field.name}
           value={field.value}
-          onChange={e => orderFormUpdate(field.name, e.target.value.trim())}
+          onChange={e => orderStore.update(field.name, e.target.value.trim())}
         />
       </div>
     )) }
     </form>
     <hr/>
-    <button type="button" className="btn btn-warning" onClick={onPrev}>Back to cart</button>
-    <button type="button" className="btn btn-success" onClick={openModal} disabled={!formValid}>
+    <Link to="/" className="btn btn-warning">Back to cart</Link>
+    <button type="button" className="btn btn-success" onClick={openModal} disabled={!orderStore.formValid}>
       Send
     </button>
     <Modal show={showModal} onHide={closeModal} onExited={onExited}>
@@ -53,7 +55,9 @@ function Order({ onPrev, onNext }){
       </Modal.Header>
 
       <Modal.Body>
-        Successfully ordered!
+        <p>...</p>
+        <p>...</p>
+        <p>...</p>
       </Modal.Body>
 
       <Modal.Footer>
@@ -62,4 +66,4 @@ function Order({ onPrev, onNext }){
       </Modal.Footer>
     </Modal>
   </div>;
-}
+})
