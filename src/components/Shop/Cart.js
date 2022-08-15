@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
-import MinMax from './MinMax'
+// import MinMax from './MinMax'
+import CartRow from './CartRow';
 import SettingContext from './../../contexts/settings'
 import { observer } from 'mobx-react-lite';
 import useStore from './../../hooks/useStore'
@@ -25,21 +26,14 @@ function Cart({ onNext }){
           <th>Total</th>
           <th>Action</th>
         </tr>
-        { products.map((pr, i) => (
-          <tr key={pr.id}>
-            <td>{ i + 1 }</td>
-            <td>{ pr.title }</td>
-            <td>{ pr.price }</td>
-            <td>
-              <MinMax min={1} max={pr.rest} current={pr.cnt} onChange={cnt => change(pr.id, cnt)} />
-            </td>
-            <td>{ pr.price * pr.cnt }</td>
-            <td>
-              <button type="button" onClick={() => remove(pr.id)}>X</button>
-              <button type="button" onClick={() => change(pr.id, pr.rest)}>MAX</button>
-            </td>
-          </tr>
-        )) }
+        { products.map((pr, i) => <CartRow
+            key={pr.id}
+            num={i + 1}
+            { ...pr }
+            onChange={change}
+            onRemove={remove}
+          />
+        )}
       </tbody>
     </table>
     <hr/>

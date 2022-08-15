@@ -381,3 +381,33 @@ A function that returns `await` should be defined as `async`
 2. (*) Block the buttons for adding / deleting goods for the duration of the request to the server
 
 Details at the end of the react-7 video.
+
+# Lesson 8
+
+Chrome Network Throttling / 2G / 3G - testing slow internet connection
+
+Each API request should be wrapped in the `try / catch`
+
+API layer for store
+
+Until data is not fetched from the server, we have to render a stub component or add a sequence of loaders and show a spinner.
+
+React Dev Tools / MobX Dev Tools
+
+The iterators should call the pure components inside the body, but not render complex HTML
+
+Pure Components - accepts the only props and functions, and doesn't have access to store/state
+
+Only `=>` functions could be destructuring from the object
+
+For the best performance, need to pass the ID of the resource inside the child component that fetches data from the store.
+
+The problem of immutability React and mutability of MobX - hard to optimize caching
+
+For best performance of components re-rendering, it's better to pass simple type to props instead of object
+
+`React.memo` should be applied only for heavy components at the last step
+
+The component should render only particular information and render other components that are responsible for other data. If we break this rule, the complex component will be re-rendered many times that slowing down the app.
+
+Pre-rendering - caching responses and then rendering SPA, need for Google performance report
